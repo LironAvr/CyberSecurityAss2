@@ -13,7 +13,7 @@ public class CipherTextAttack {
         try {
             byte[] vector = Files.readAllBytes(new File(ivPath).toPath());
             byte[] cipher = Files.readAllBytes(new File(cipherPath).toPath());
-            LinkedList<byte[]> blocks = Utils.createBlocks(cipher, vector.length);
+            LinkedList<byte[]> blocks = Utils.createFirstBlocks(cipher, vector.length);
             dictionary = Utils.getDictionary();
 
             HashMap<Byte, Byte> key = findKey(blocks, vector);
@@ -31,7 +31,6 @@ public class CipherTextAttack {
         for (HashMap<Byte, Byte> currentKey: allKeyOptions){
             List<byte[]> plainText = EncryptDecrypt.decrypt(blocks, vector, currentKey);
             int matches = countKeyMatches(plainText, vector.length);
-            //TODO: complete saving the highest matching key
             if (matches > maxMatch){
                 maxMatch = matches;
                 key = currentKey;
@@ -42,14 +41,13 @@ public class CipherTextAttack {
 
     private static int countKeyMatches(List<byte[]> plainText, int size) {
         int matches = 0;
-
-        byte[] bytes = new byte[8000];
+        byte[] bytes = new byte[5000];
         byte[] current;
 
-        for (int i = 0; i < 800; ++i){
+        for (int i = 0; i < 500; ++i){
             try{
                 current = plainText.get(i);
-            }catch (Exception exc) {break;}
+            }catch (Exception ex) { break; }
             int length = current.length;
             for (int j = 0; j < length; ++j){
                 bytes[i * size + j] = current[j];
@@ -59,7 +57,7 @@ public class CipherTextAttack {
             }
         }
 
-        for (int i = 0; i < 8000; ++i){
+        for (int i = 0; i < 5000; ++i){
             List<Byte> word = new LinkedList<>();
             int length = bytes.length;
             while (i < length && (bytes[i] != 10 | bytes[i] != 32)){
@@ -78,7 +76,6 @@ public class CipherTextAttack {
             }
             word.clear();
         }
-
         return matches;
     }
 }
