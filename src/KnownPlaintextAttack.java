@@ -29,10 +29,15 @@ public class KnownPlaintextAttack {
     }
 
     private static void findKey() {
-
+        byte[] IV = vector.clone();
         for (byte[] block: blocks){
             keyOptimizer(block, vector);
             vector = block;
+        }
+        if (key.size() < 52){
+            iteration = true;
+            vector = IV;
+            findKey();
         }
     }
 
@@ -75,19 +80,60 @@ public class KnownPlaintextAttack {
     private static void varifyWithDictionary(byte vectorByte, int wordIndex, byte unknownLetter, List<Byte> word){
         int matches = 0;
         byte optionalValue = 0, xorProduct = 0;
-        LinkedList<Byte> currentWord;//= new LinkedList<>(word);
+        LinkedList<Byte> currentWord = new LinkedList<>(word);
         for (byte current: optionalValues){
             xorProduct = (byte) (current ^ vectorByte);
             if (letters.containsKey(xorProduct)) continue;
-            currentWord = new LinkedList<>(word);
             currentWord.set(wordIndex, xorProduct);
-
+            if (dictionaryContains(currentWord)){
+                ++matches;
+                optionalValue = current;
+            }
+            currentWord = new LinkedList<>(word);
         }
+        if (!iteration & 1 == matches){
+            key.put(unknownLetter, optionalValue);
+            optionalValues.remove(optionalValue);
+            optionalKeys.remove(unknownLetter);
+        }
+        else if (2 == matches){
+            boolean capital = true;
+            int length = currentWord.size();
+            for (int i = 0; i < length; ++i){
+                if (i != wordIndex & (currentWord.get(i) > 96 & currentWord.get(i) < 123)){
+                    capital = false;
+                    break;
+                }
+            }
+            if (!capital){
+                optionalValue -= 32;
+                if (!(optionalValues.contains(optionalValue) & vectorByte > 32)){
+                    return;
+                }
+            }
+            key.put(unknownLetter, optionalValue);
+            optionalValues.remove(optionalValue);
+            optionalKeys.remove(unknownLetter);
+        }
+    }
+
+    private static boolean dictionaryContains(LinkedList<Byte> currentWord) {
+        int length = currentWord.size();
+        LinkedList<Byte> word = new LinkedList<>(currentWord);
+        for (int i = 0; i < length; ++i){
+            if (word.get(i) > 64 & word.get(i) < 91){
+                byte letter = word.get(i);
+                letter += 32;
+                word.set(i, letter);
+            }
+        }
+        return dictionary.contains(word);
     }
 
     private static void resolveKnownText(String knownPlainPath, String knownCipherPath) throws IOException {
         byte[] knownPlainText = Files.readAllBytes(new File(knownPlainPath).toPath());
         byte[] knownCipherText = Files.readAllBytes(new File(knownCipherPath).toPath());
+        if (0 == knownCipherText.length | 0 == knownPlainText.length) return;
         byte[] xorProduct = Utils.xor(knownPlainText, vector);
         int length = xorProduct.length;
         for (int i = 0; i < length; ++i){

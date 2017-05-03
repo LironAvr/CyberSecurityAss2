@@ -19,7 +19,7 @@ public class Utils {
           }
           output.flush();
           output.close();
-      }catch (Exception ex){ System.out.println(ex.getMessage()); }
+      }catch (Exception ex){ System.out.println(ex.toString()); }
   }
 
   public static HashMap<Byte, Byte> getKey(String path, char cmd){
@@ -28,14 +28,14 @@ public class Utils {
           byte[] keyBytes = Files.readAllBytes(new File(path).toPath());
           int length = keyBytes.length - 2;
           if (cmd == 'e')
-              for(int i = 0; i < length; i = i + 5)
+              for(int i = 0; i < length; i = i + 4)
                 key.put(keyBytes[i], keyBytes[i + 2]);
           else
-              for(int i = 0; i < length; i = i + 5)
+              for(int i = 0; i < length; i = i + 4)
                   key.put(keyBytes[i + 2], keyBytes[i]);
 
       } catch (Exception ex){
-          System.out.println(ex.getMessage());
+          System.out.println("Exception: " + ex.toString());
       }
       return key;
   }
@@ -61,7 +61,7 @@ public class Utils {
           words = Files.readAllBytes(new File("C:\\Users\\liron\\Desktop\\CyberSecurityAss2\\files\\words.txt").toPath());//TODO fix path
       }
       catch (Exception ex){
-          System.out.println(ex.toString());
+          System.out.println(ex.toString);
       }
 
       for(int i=0; i<words.length; i++){
@@ -121,9 +121,10 @@ public class Utils {
           }
           out.flush();
           out.close();
+          System.out.println("Key Output: " + path);
       }
       catch(Exception ex){
-          System.out.println(ex.getMessage());
+          System.out.println(ex.toString());
       }
   }
 

@@ -3,7 +3,6 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.io.File;
-import java.util.List;
 
 /**
  * Created by liron on 26/04/2017.
@@ -28,7 +27,7 @@ public class EncryptDecrypt {
             }
 
         }catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            System.out.println(ex.toString());
             throw ex;
         }
         return cipher;
@@ -53,15 +52,9 @@ public class EncryptDecrypt {
             LinkedList<byte[]> blocks = Utils.createBlocks(cipher, vector.length);
             HashMap<Byte, Byte> key = Utils.getKey(keyPath, 'd');
             plainText = decrypt(blocks, vector, key);
-            /*for (byte[] block: blocks){
-                plainTextBlock = decryptBlock(block, key);
-                plainTextBlock = Utils.xor(plainTextBlock, vector);
-                plainText.add(plainTextBlock);
-                vector = block.clone(); //Should make a copy?
-            }*/
         }
         catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            System.out.println(ex.toString());
         }
         return plainText;
     }
