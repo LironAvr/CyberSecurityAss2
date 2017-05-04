@@ -54,16 +54,34 @@ public class Main {
         }
     }
 
-    public static void parametersHandler(String[] args){
+    private static void parametersHandler(String[] args){
         for (int i = 0; i < args.length; i = i + 2){
-            if      (args[i].equals("-a")) { algorithm = args[i + 1]; }
-            else if (args[i].equals("-c")) { command = args[i + 1]; }
-            else if (args[i].equals("-t")) { input = args[i + 1]; }
-            else if (args[i].equals("-k")) { key = args[i + 1]; }
-            else if (args[i].equals("-v")) { IV = args[i + 1]; }
-            else if (args[i].equals("-o")) { output = args[i + 1]; }
-            else if (args[i].equals("-kp")){ knownPlainText = args[i + 1]; }
-            else if (args[i].equals("-kc")){ knownCipher = args[i + 1]; }
+            switch (args[i]) {
+                case "-a":
+                    algorithm = args[i + 1];
+                    break;
+                case "-c":
+                    command = args[i + 1];
+                    break;
+                case "-t":
+                    input = args[i + 1];
+                    break;
+                case "-k":
+                    key = args[i + 1];
+                    break;
+                case "-v":
+                    IV = args[i + 1];
+                    break;
+                case "-o":
+                    output = args[i + 1];
+                    break;
+                case "-kp":
+                    knownPlainText = args[i + 1];
+                    break;
+                case "-kc":
+                    knownCipher = args[i + 1];
+                    break;
+            }
         }
     }
 }
