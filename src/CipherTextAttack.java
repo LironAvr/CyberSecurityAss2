@@ -13,7 +13,7 @@ public class CipherTextAttack {
         try {
             byte[] vector = Files.readAllBytes(new File(ivPath).toPath());
             byte[] cipher = Files.readAllBytes(new File(cipherPath).toPath());
-            LinkedList<byte[]> blocks = Utils.createFirstBlocks(cipher, vector.length);
+            LinkedList<byte[]> blocks = Utils.createBlocks(cipher, vector.length, false);
             dictionary = Utils.getDictionary();
 
             HashMap<Byte, Byte> key = findKey(blocks, vector);
@@ -70,7 +70,6 @@ public class CipherTextAttack {
                     break;
                 }
             }
-            //String temp = word.toString();
             if (dictionary.contains(word)){
                 ++matches;
             }

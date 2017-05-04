@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CyberSecurityAss2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CyberSecurityAss2_jar</output-path>
+    <root id="archive" name="CyberSecurityAss2.jar">
+      <element id="module-output" name="CyberSecurityAss2" />
+    </root>
+  </artifact>
+</component>

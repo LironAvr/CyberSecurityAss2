@@ -1,5 +1,3 @@
-import sun.awt.image.ImageWatched;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,6 +6,7 @@ import java.util.*;
 /**
  * Created by liron on 01/05/2017.
  */
+
 public class KnownPlaintextAttack {
 
     private static HashMap<Byte, Byte> key = new HashMap<>();
@@ -182,32 +181,6 @@ public class KnownPlaintextAttack {
         letters.put((byte)88, new HashMap<>());
         letters.put((byte)89, new HashMap<>());
         letters.put((byte)90, new HashMap<>());
-        letters.put((byte)65, new HashMap<>());
-        letters.put((byte)66, new HashMap<>());
-        letters.put((byte)67, new HashMap<>());
-        letters.put((byte)68, new HashMap<>());
-        letters.put((byte)69, new HashMap<>());
-        letters.put((byte)70, new HashMap<>());
-        letters.put((byte)71, new HashMap<>());
-        letters.put((byte)72, new HashMap<>());
-        letters.put((byte)73, new HashMap<>());
-        letters.put((byte)74, new HashMap<>());
-        letters.put((byte)75, new HashMap<>());
-        letters.put((byte)76, new HashMap<>());
-        letters.put((byte)77, new HashMap<>());
-        letters.put((byte)78, new HashMap<>());
-        letters.put((byte)79, new HashMap<>());
-        letters.put((byte)80, new HashMap<>());
-        letters.put((byte)81, new HashMap<>());
-        letters.put((byte)82, new HashMap<>());
-        letters.put((byte)83, new HashMap<>());
-        letters.put((byte)84, new HashMap<>());
-        letters.put((byte)85, new HashMap<>());
-        letters.put((byte)86, new HashMap<>());
-        letters.put((byte)87, new HashMap<>());
-        letters.put((byte)88, new HashMap<>());
-        letters.put((byte)89, new HashMap<>());
-        letters.put((byte)90, new HashMap<>());
         letters.put((byte)97, new HashMap<>());
         letters.put((byte)98, new HashMap<>());
         letters.put((byte)99, new HashMap<>());
@@ -260,9 +233,9 @@ public class KnownPlaintextAttack {
         ignoreChars.add((byte)'-');
         ignoreChars.add((byte)'`');
         ignoreChars.add((byte)'~');
-        ignoreChars.add((byte)' ');  //Check - might be problematic
-        ignoreChars.add((byte)'\n'); //Check - might be problematic
-        ignoreChars.add((byte)'\r'); //Check - might be problematic
+        ignoreChars.add((byte)' ');
+        ignoreChars.add((byte)'\n');
+        ignoreChars.add((byte)'\r');
 
         //Init Dictionary
         dictionary = Utils.getDictionary();
@@ -274,6 +247,6 @@ public class KnownPlaintextAttack {
         //Init Cipher Blocks and Initial Vector
         vector = Files.readAllBytes(new File(ivPath).toPath());
         size = vector.length;
-        blocks = Utils.createBlocks(Files.readAllBytes(new File(cipherPath).toPath()), size);
+        blocks = Utils.createBlocks(Files.readAllBytes(new File(cipherPath).toPath()), size, true);
     }
 }

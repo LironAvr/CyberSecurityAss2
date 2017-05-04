@@ -7,6 +7,7 @@ import java.io.File;
 /**
  * Created by liron on 26/04/2017.
  */
+
 public class EncryptDecrypt {
 
     public static LinkedList<byte[]> encrypt (String textPath, String ivPath, String keyPath) throws IOException {
@@ -14,11 +15,10 @@ public class EncryptDecrypt {
         try{
             byte[] vector = Files.readAllBytes(new File(ivPath).toPath());
             byte[] text = Files.readAllBytes(new File(textPath).toPath());
-            byte[] cipherBlock;// = encryptBlock(vector, key);
-            LinkedList<byte[]> blocks = Utils.createBlocks(text, vector.length);
+            byte[] cipherBlock;
+            LinkedList<byte[]> blocks = Utils.createBlocks(text, vector.length, true);
             HashMap<Byte, Byte> key = Utils.getKey(keyPath, 'e');
-            //TODO: check maybe need temp
-            //Encryption
+
             for (byte[] block: blocks){
                 vector = Utils.xor(block, vector);
                 cipherBlock = encryptBlock(vector, key);
@@ -48,8 +48,7 @@ public class EncryptDecrypt {
         try {
             byte[] vector = Files.readAllBytes(new File(ivPath).toPath());
             byte[] cipher = Files.readAllBytes(new File(cipherPath).toPath());
-            //byte[] plainTextBlock;// = encryptBlock(vector, key);
-            LinkedList<byte[]> blocks = Utils.createBlocks(cipher, vector.length);
+            LinkedList<byte[]> blocks = Utils.createBlocks(cipher, vector.length, true);
             HashMap<Byte, Byte> key = Utils.getKey(keyPath, 'd');
             plainText = decrypt(blocks, vector, key);
         }
@@ -78,7 +77,7 @@ public class EncryptDecrypt {
             plainTextBlock = decryptBlock(block, key);
             plainTextBlock = Utils.xor(plainTextBlock, vector);
             plainText.add(plainTextBlock);
-            vector = block.clone(); //Should make a copy?
+            vector = block.clone();
         }
         return plainText;
     }

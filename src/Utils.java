@@ -9,8 +9,6 @@ import java.nio.file.Files;
 
 public class Utils {
 
-  private static final String base = new File("").getAbsolutePath();
-
   public static void write(LinkedList<byte[]> text, String path) {
       try{
           FileOutputStream output = new FileOutputStream(path);
@@ -53,26 +51,6 @@ public class Utils {
           dictionary.add(newWord);
       }
       return dictionary;
-/*
-      Set<List<Byte>> dic = new HashSet<>();
-      String path = "\\words.txt";
-      byte[] words = null;
-      try{
-          words = Files.readAllBytes(new File("C:\\Users\\liron\\Desktop\\CyberSecurityAss2\\files\\words.txt").toPath());//TODO fix path
-      }
-      catch (Exception ex){
-          System.out.println(ex.toString);
-      }
-
-      for(int i=0; i<words.length; i++){
-          List<Byte> word = new LinkedList<>();
-          while(i<words.length && words[i] !=10){
-              word.add(words[i]);
-              i++;
-          }
-          dic.add(word);
-      }
-      return dic;*/
   }
 
   public static byte[] xor(byte[] plain, byte[] vector){
@@ -84,10 +62,11 @@ public class Utils {
       return product;
   }
 
-  public static LinkedList<byte[]> createBlocks(byte[] text, int size){
+  public static LinkedList<byte[]> createBlocks(byte[] text, int size, boolean fullText){
       LinkedList<byte[]> blocks = new LinkedList<>();
       double mainLength = text.length / size;
       int length = text.length;
+      if (!fullText & mainLength > 550) mainLength = 550;
       for (double i = 0 ; i <= mainLength; ++i){
             boolean isPad = false;
             byte[] block = new byte[size];
@@ -114,7 +93,6 @@ public class Utils {
           Iterator iterator = key.entrySet().iterator();
           while(iterator.hasNext()){
               Map.Entry entry = (Map.Entry) iterator.next();
-              //Check it works
               byte[] current = new byte[]{(byte) entry.getValue(), 32, (byte) entry.getKey(), 10};
               out.write(current);
               iterator.remove();
@@ -156,7 +134,7 @@ public class Utils {
 
       char first = input.charAt(0);
       String remaining = input.substring(1);
-      Set<String> words = permute(remaining); //recursive call
+      Set<String> words = permute(remaining);
       for (String current: words){
           int length = current.length() + 1;
           for (int i = 0; i < length; ++i){
@@ -174,29 +152,4 @@ public class Utils {
       }
       return allKeys;
   }
-
-    public static LinkedList<byte[]> createFirstBlocks(byte[] text, int size) {
-        LinkedList<byte[]> blocks = new LinkedList<>();
-        double mainLength = text.length / size;
-        if (mainLength > 550) mainLength = 550;
-        int length = text.length;
-        for (double i = 0 ; i <= mainLength; ++i){
-            boolean isPad = false;
-            byte[] block = new byte[size];
-            for (int j = 0; j < size; ++j){
-                int location = (int) (i * size + j);
-                if (location < length){
-                    block[j] = text[location];
-                    isPad = true;
-                }
-                else{
-                    block[j] = 0;
-                }
-            }
-            if (isPad){
-                blocks.add(block);
-            }
-        }
-        return blocks;
-    }
 }
